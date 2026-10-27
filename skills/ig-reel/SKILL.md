@@ -1,147 +1,157 @@
 ---
 name: ig-reel
 description: >-
-  Write an Instagram Reel from a raw idea - hook options off 26 formulas, the
-  spoken script, the on-screen text, and a timed beat sheet - in the user's own
-  voice and scored before they shoot it. Use whenever the user wants a Reel, a
-  short-form video script, a hook, a voiceover, "make a reel about X", "what
-  should I say in this video", or is about to record and does not have the
-  first line yet.
+  Escribe un Reel de Instagram a partir de una idea en bruto: opciones de hook
+  sacadas de 26 fórmulas, el guion hablado, el texto en pantalla y una escaleta
+  cronometrada, con la voz del usuario y puntuado antes de grabar. Úsalo cuando
+  el usuario quiera un Reel, un guion de vídeo corto, un hook, una locución,
+  "hazme un reel sobre X", "qué digo en este vídeo", "escríbeme el guion", o
+  esté a punto de grabar y todavía no tenga la primera frase.
 ---
 
 # ig-reel
 
-Turns one raw idea into a Reel that somebody finishes.
+Convierte una idea en bruto en un Reel que alguien vea hasta el final.
 
-Two tools live in this folder and they both actually run. Use them. Do not
-eyeball the hook and do not guess at the length.
+En esta carpeta hay dos herramientas y las dos se ejecutan de verdad. Úsalas.
+No juzgues el hook a ojo y no adivines la duración.
 
 ```bash
-python3 hookscore.py hooks.txt              # rank your hook options
-python3 hookscore.py --hook "one line"      # score a single one
-python3 beats.py script.txt --target 30     # timed beat sheet before you shoot
+python3 hookscore.py hooks.txt              # ordena tus opciones de hook
+python3 hookscore.py --hook "una frase"     # puntúa uno solo
+python3 beats.py guion.txt --target 30      # escaleta cronometrada antes de grabar
 ```
 
-## Before you write
+Las dos funcionan en español y en inglés, y las tildes no afectan.
 
-1. Read `~/.claude/instagram/voice.md` if it exists. That is the user's voice
-   profile: how they talk on camera, what they never say, who they are talking
-   to. If it does not exist, ask for **three of their own reels**, transcribe or
-   read them, infer the voice, and write the file. A script in the wrong voice
-   is unusable, because they have to say it out loud.
-2. Read `hooks.json` in this folder. 26 formulas, each with a template, a filled
-   example, the on-screen version, what it is for, and how it gets ruined.
-   Four of them are in there because they kept turning up in real hooks, not
-   because they completed a pattern.
-3. If the idea is thin, do not pad it. Ask one batched question: what happened,
-   to whom, and what did it cost or return. A Reel needs one specific true
-   thing. Get it before writing.
-4. If `~/.claude/instagram/swipe.md` exists, read it. `/ig-viral` writes that
-   file, and it is the user's own evidence about which formulas are working in
-   their niche right now. It beats the defaults in this file.
+## Antes de escribir
 
-## The shape
+1. Lee `~/.claude/instagram/voice.md` si existe. Es el perfil de voz del
+   usuario: cómo habla a cámara, qué no dice nunca y a quién le habla. Si no
+   existe, pídele **tres de sus propios reels**, transcríbelos o léelos, deduce
+   la voz y escribe el archivo. Un guion con la voz equivocada no sirve, porque
+   lo tiene que decir en voz alta.
+2. Lee `hooks.json` en esta carpeta. 26 fórmulas, cada una con plantilla,
+   ejemplo relleno, versión en pantalla, para qué sirve y cómo se estropea.
+   Cuatro están ahí porque aparecían una y otra vez en hooks reales, no para
+   completar un patrón. Las cifras de los ejemplos son ilustrativas.
+3. Si la idea es floja, no la rellenes. Haz una sola pregunta agrupada: qué
+   pasó, a quién, y qué costó o qué devolvió. Un Reel necesita una cosa
+   concreta y verdadera. Consíguela antes de escribir.
+4. Si existe `~/.claude/instagram/swipe.md`, léelo. Lo escribe `/ig-viral`, y
+   son las pruebas del propio usuario sobre qué fórmulas funcionan ahora mismo
+   en su nicho. Tienen prioridad sobre lo que dice este archivo.
 
-A Reel is decided in the first two seconds and kept by the next five.
+## La estructura
 
-```
-0:00 - 0:02   HOOK        the claim. Spoken line and on-screen line, written
-                          separately. Motion in the first frame, not a static face.
-0:02 - 0:07   THE STAKE   why this matters to the person watching. One line.
-0:07 - ...    THE BODY    one idea per beat, and the frame changes every beat.
-LAST 3s       THE PAYOFF  deliver what the hook promised, then the single ask.
-LAST LINE     THE LOOP    echo one word from the hook so the replay lands clean.
-```
-
-Length: 15 to 45 seconds is the working range. Reels run to 3 minutes and
-almost nobody should use it. Under 7 seconds the loop counts inflate and
-nothing else does.
-
-## The loop
-
-**1. Pick three hooks, not one.** Run the idea through `hooks.json`, choose
-three formulas that genuinely fit it, and write the spoken line plus the
-on-screen line for each. Different formulas, not three rewrites of one.
-
-**2. Score them.** Put the three spoken lines in a file, one per line, and run
-`hookscore.py`. Show the user the ranking. If the top one is under 50, you do
-not have the hook yet and no amount of editing fixes that.
-
-**3. Write the script** on the winning hook. Plain spoken language, the way the
-user actually talks. Contractions. Short lines. No sentence they would have to
-rehearse.
-
-**4. Time it.** Run `beats.py script.txt --target {length}`. Fix every flag:
-a hook past 3 seconds, any beat over 4 seconds, a run of beats with nothing
-concrete in them, no loop. Re-run until it is clean.
-
-**5. Humanize it.** Run the script through `/ig-human` before showing it. A
-written-sounding line is obvious the moment someone says it out loud.
-
-**6. Print the block.** The script in a fenced block, the on-screen text as a
-separate list with timings, and then:
+Un Reel se decide en los dos primeros segundos y se retiene en los cinco
+siguientes.
 
 ```
-REEL READY
-hook:       #3 Nobody Tells You, scored 86 STRONG
-length:     28.4s across 9 beats at 165 wpm
-on-screen:  6 cards
-humanizer:  4 artefacts stripped, human score 81 PASS
-caption:    run /ig-caption next
-
-Reply "yes" to log it, or tell me what to change.
+0:00 - 0:02   HOOK        la afirmación. Frase hablada y frase en pantalla, escritas
+                          por separado. Movimiento en el primer fotograma, no una
+                          cara estática.
+0:02 - 0:07   LO EN JUEGO por qué le importa a quien lo está viendo. Una frase.
+0:07 - ...    EL CUERPO   una idea por beat, y el plano cambia en cada beat.
+ÚLTIMOS 3 s   LA RECOMPENSA cumple lo que prometió el hook, y luego la única petición.
+ÚLTIMA FRASE  EL BUCLE    repite una palabra del hook para que la repetición encaje.
 ```
 
-**7. Never publish.** This skill produces a script. The user shoots it and
-posts it. On "yes", append to `~/.claude/instagram/log.md` with the date, the
-hook formula used and the first line, so `/ig-audit` has a history later.
+Duración: de 15 a 45 segundos es el rango que funciona. Los Reels pueden durar
+hasta 3 minutos y casi nadie debería usarlos. Por debajo de 7 segundos se
+inflan las repeticiones y nada más.
 
-## On-screen text is a separate script
+## El proceso
 
-Write it separately, every time. It is read before it is heard.
+**1. Elige tres hooks, no uno.** Pasa la idea por `hooks.json`, elige tres
+fórmulas que de verdad encajen y escribe para cada una la frase hablada y la de
+pantalla. Fórmulas distintas, no tres versiones de la misma.
 
-- **Six words or fewer per card.** It is being read at arm's length by someone
-  who is not listening yet.
-- **The hook card is up at frame 1**, not after a beat of silence.
-- **Keep it inside the safe zone.** On a 1080x1920 frame, nothing above y=230
-  or below y=1440, and keep the right 230 pixels clear. The interface sits on
-  top of everything outside that box: the caption, the action rail, the audio
-  strip.
-- **Never put the hook where the caption sits.** That is the bottom of the
-  frame and it is covered.
-- **Burn in captions for the body.** Most people watch muted first.
+**2. Puntúalos.** Pon las tres frases habladas en un archivo, una por línea, y
+ejecuta `hookscore.py`. Enséñale el ranking al usuario. Si el primero está por
+debajo de 50, todavía no tienes el hook y ninguna edición lo arregla.
 
-## Rules that make the difference
+**3. Escribe el guion** sobre el hook ganador. Lenguaje hablado y llano, como
+habla de verdad el usuario. Frases cortas. Ninguna frase que tenga que ensayar.
+Tutea al espectador salvo que su `voice.md` diga lo contrario.
 
-- **One idea per Reel.** If the script has two, you have two Reels. Say so.
-- **Numbers over adjectives.** "$4,200" beats "a lot". If the user has not
-  given a number, ask for one rather than writing around the hole.
-- **Cut the intro.** No greeting, no "in this video", no name, no logo sting.
-  The video starts at the sentence you would normally reach at second six.
-- **Change the frame every beat.** A static shot for 8 seconds is where people
-  leave, and `beats.py` will flag it.
-- **One ask at the end.** Comment a keyword, save it, or follow. One.
-- **Never fabricate.** No invented metrics, clients, revenue or outcomes under
-  the user's name, even as a placeholder. If a number is needed and unknown,
-  leave `{{your number}}` in the script and flag it.
-- **Do not write a script around a trending audio the user cannot use.** If the
-  idea needs the user's own voice, say so.
+**4. Cronométralo.** Ejecuta `beats.py guion.txt --target {duración}`. Arregla
+todos los avisos: un hook que pasa de 3 segundos, cualquier beat de más de 4
+segundos, una racha de beats sin nada concreto, la falta de bucle. Repite hasta
+que salga limpio. Si el usuario se ha cronometrado, usa su ritmo con `--wpm`:
+en español las palabras son más largas que en inglés y el valor por defecto
+(165) es solo un punto de partida.
 
-## Example
+**5. Humanízalo.** Pasa el guion por `/ig-human` antes de enseñarlo. Una frase
+que suena a escrita se nota en cuanto alguien la dice en voz alta.
+
+**6. Imprime el bloque.** El guion en un bloque de código, el texto en pantalla
+como lista aparte con sus tiempos, y después:
 
 ```
-/ig-reel we cut proposal time from 5 hours to 20 minutes with one template
+REEL LISTO
+hook:        #3 Nadie te lo cuenta, nota 86 FUERTE
+duración:    28,4 s en 9 beats a 165 ppm
+en pantalla: 6 rótulos
+humanizador: 4 restos eliminados, nota humana 81 APTO
+descripción: ejecuta /ig-caption después
+
+Responde "sí" para guardarlo en el registro, o dime qué cambio.
+```
+
+**7. Nunca publiques.** Esta skill produce un guion. El usuario lo graba y lo
+publica. Con un "sí", añade a `~/.claude/instagram/log.md` la fecha, la fórmula
+de hook usada y la primera frase, para que `/ig-audit` tenga historial después.
+
+## El texto en pantalla es otro guion
+
+Escríbelo aparte, siempre. Se lee antes de oírse.
+
+- **Seis palabras o menos por rótulo.** Lo lee, con el móvil a un brazo de
+  distancia, alguien que todavía no está escuchando.
+- **El rótulo del hook aparece en el fotograma 1**, no tras un silencio.
+- **Mantenlo dentro de la zona segura.** En un fotograma de 1080x1920, nada por
+  encima de y=230 ni por debajo de y=1440, y deja libres los 230 píxeles de la
+  derecha. Fuera de esa caja la interfaz lo tapa todo: la descripción, la barra
+  de acciones y la tira del audio.
+- **Nunca pongas el hook donde va la descripción.** Es la parte de abajo del
+  fotograma y queda tapada.
+- **Subtitula el cuerpo.** Casi todo el mundo lo ve primero sin sonido.
+
+## Reglas que marcan la diferencia
+
+- **Una idea por Reel.** Si el guion tiene dos, tienes dos Reels. Dilo.
+- **Cifras mejor que adjetivos.** "4.200 €" gana a "un montón". Si el usuario
+  no ha dado una cifra, pídela en vez de escribir alrededor del hueco.
+- **Fuera la intro.** Ni saludo, ni "en este vídeo", ni nombre, ni cortinilla
+  con el logo. El vídeo empieza en la frase a la que normalmente llegarías en
+  el segundo seis.
+- **Cambia el plano en cada beat.** Un plano fijo durante 8 segundos es donde
+  la gente se va, y `beats.py` lo marcará.
+- **Una petición al final.** Comentar una palabra clave, guardarlo o seguir.
+  Una.
+- **Nunca inventes.** Ni métricas, ni clientes, ni facturación, ni resultados
+  inventados a nombre del usuario, ni siquiera de relleno. Si hace falta una
+  cifra que no sabes, deja `{{tu cifra}}` en el guion y señálalo.
+- **No escribas un guion alrededor de un audio en tendencia que el usuario no
+  puede usar.** Si la idea necesita su propia voz, dilo.
+
+## Ejemplo
+
+```
+/ig-reel hemos pasado de 5 horas a 20 minutos por presupuesto con una plantilla
 ```
 
 ```
-HOOKS  (scored)
-  86  STRONG  #5  Time Collapse   "Proposals used to take me five hours. Twenty minutes now."
-                                  on screen: 5 HOURS -> 20 MIN
-  71  STRONG  #1  Cost Confession "I billed four hours a week for formatting. For two years."
-                                  on screen: 2 YEARS WASTED
-  54  OK      #9  The Steal       "Steal the proposal template that did it."
-                                  on screen: STEAL THIS
+HOOKS  (puntuados)
+  79  FUERTE  #5  Colapso de tiempo   "Antes tardaba cinco horas en un presupuesto. Ahora, veinte minutos."
+                                      en pantalla: 5 HORAS -> 20 MIN
+  79  FUERTE  #1  Confesión de coste  "Cobré cuatro horas a la semana por maquetar. Durante dos años."
+                                      en pantalla: 2 AÑOS PERDIDOS
+  37  DÉBIL   #9  Róbalo              "Róbame la plantilla de presupuesto que lo hizo."
+                                      en pantalla: RÓBAME ESTO
+              más débil: CONCRECIÓN. Ni una cifra; sin el "5 horas -> 20 min" no hay nada que robar.
 
-Shooting #5: the ratio is believable, it reads in one glance on screen,
-and the number is yours.
+Empate entre #5 y #1. Grabaría el #5: la proporción es creíble, se lee de un
+vistazo en pantalla y la cifra es tuya. El script no desempata; eso lo decides tú.
 ```

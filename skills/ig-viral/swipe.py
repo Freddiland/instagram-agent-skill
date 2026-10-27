@@ -1,28 +1,31 @@
 #!/usr/bin/env python3
 """
-swipe.py - rank reels you collected by how far they beat their own account,
-name the hook formula each one used, and write the swipe file.
+swipe.py - ordena los reels que has recopilado según cuánto superaron a su
+propia cuenta, nombra la fórmula de hook que usó cada uno y escribe el archivo
+de referencias (swipe file).
 
-The point of this script is one correction: raw views are not evidence. A
-2,000,000-follower account doing 400,000 views had a quiet day. A 4,000-
-follower account doing 400,000 views found something. This ranks on the
-multiple over the account's own baseline, which is the only version of
-"went viral" that tells you anything you can copy.
+Este script existe para una sola corrección: las visualizaciones en bruto no
+son una prueba. Una cuenta de 2.000.000 de seguidores con 400.000 vistas ha
+tenido un día flojo. Una cuenta de 4.000 seguidores con 400.000 vistas ha dado
+con algo. Esto ordena por el múltiplo sobre la referencia de la propia cuenta,
+que es la única versión de "se hizo viral" que te dice algo que puedas copiar.
 
-Input is a tab-separated file you fill in while you browse, one reel per row,
-with a header line naming the columns:
+La entrada es un archivo separado por tabuladores que vas rellenando mientras
+navegas, un reel por fila, con una cabecera que nombra las columnas (en
+español o en inglés):
 
-    account   followers   median   views    hook
-    @someone  48000       11000    412000   nobody tells you your first 30 flop
+    cuenta    seguidores   mediana   vistas    hook
+    @alguien  48000        11000     412000    nadie te cuenta que tus primeros 30 fracasan
 
-`median` is that account's typical recent views and is the better baseline.
-If you only have `followers`, leave median out and the script says so.
-`hook` is the first line of the reel, spoken or on screen, in their words.
+`mediana` son las vistas habituales recientes de esa cuenta y es la mejor
+referencia. Si solo tienes `seguidores`, deja la mediana fuera y el script lo
+avisa. `hook` es la primera frase del reel, hablada o en pantalla, con sus
+palabras.
 
-Usage
-  python3 swipe.py captured.tsv
-  python3 swipe.py captured.tsv --out ~/.claude/instagram/swipe.md
-  python3 swipe.py captured.tsv --json
+Uso
+  python3 swipe.py capturados.tsv
+  python3 swipe.py capturados.tsv --out ~/.claude/instagram/swipe.md
+  python3 swipe.py capturados.tsv --json
 """
 
 import argparse
@@ -31,16 +34,34 @@ import os
 import re
 import statistics
 import sys
+import unicodedata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-HOOKS = os.path.join(HERE, "..", "ig-reel", "hooks.json")
-WORD_RE = re.compile(r"[A-Za-z0-9$%'’-]+")
+# Junto al script (paquete .skill independiente) o en la carpeta hermana ig-reel.
+HOOKS_CANDIDATES = [os.path.join(HERE, "hooks.json"),
+                    os.path.join(HERE, "..", "ig-reel", "hooks.json")]
+HOOKS = next((p for p in HOOKS_CANDIDATES if os.path.exists(p)), HOOKS_CANDIDATES[-1])
+WORD_RE = re.compile(r"[\w$%'’€-]+")
 
-try:                                              # optional: score the hooks too
-    sys.path.insert(0, os.path.join(HERE, "..", "ig-reel"))
+try:                                              # opcional: puntuar también los hooks
+    sys.path.insert(0, HERE)
+    sys.path.insert(1, os.path.join(HERE, "..", "ig-reel"))
     from hookscore import run as score_hook       # noqa: E402
-except Exception:                                 # ig-viral copied on its own
+except Exception:                                 # ig-viral copiado por separado
     score_hook = None
+
+COLUMNS = {
+    "cuenta": "account", "account": "account",
+    "seguidores": "followers", "followers": "followers",
+    "mediana": "median", "median": "median",
+    "vistas": "views", "visualizaciones": "views", "reproducciones": "views", "views": "views",
+    "hook": "hook", "gancho": "hook",
+}
+
+
+def fold(text):
+    nfd = unicodedata.normalize("NFD", text.lower())
+    return "".join(c for c in nfd if unicodedata.category(c) != "Mn")
 
 
 def load_formulas(path):
@@ -56,11 +77,14 @@ def load_formulas(path):
 
 def classify(hook, formulas):
     if not formulas:
-        return None, "unclassified"
+        return None, "sin clasificar"
+    # Las regex en español van sin tildes, así que se compara sin tildes. Se
+    # prueba también el original por si una regex inglesa depende del texto tal cual.
+    plain = fold(hook)
     for fid, name, pattern in formulas:
-        if pattern.search(hook):
+        if pattern.search(plain) or pattern.search(hook):
             return fid, name
-    return None, "unclassified"
+    return None, "sin clasificar"
 
 
 def read_rows(path):
@@ -68,7 +92,7 @@ def read_rows(path):
     lines = [l for l in raw.splitlines() if l.strip() and not l.lstrip().startswith("#")]
     if not lines:
         return []
-    head = [c.strip().lower() for c in lines[0].split("\t")]
+    head = [COLUMNS.get(fold(c.strip()), fold(c.strip())) for c in lines[0].split("\t")]
     if "views" in head and "hook" in head:
         cols, body = head, lines[1:]
     else:
@@ -89,6 +113,10 @@ def read_rows(path):
         if r["views"] and r.get("hook"):
             rows.append(r)
     return rows
+
+
+def miles(n):
+    return f"{n:,}".replace(",", ".")
 
 
 def analyse(rows, formulas):
@@ -116,7 +144,7 @@ def analyse(rows, formulas):
     for r in top:
         counts[r["formula"]] = counts.get(r["formula"], 0) + 1
     return {
-        "baseline": "account median" if used_median else "follower count",
+        "baseline": "mediana de la cuenta" if used_median else "número de seguidores",
         "n": len(ranked),
         "accounts": len({r.get("account", "") for r in ranked}),
         "reels": ranked,
@@ -125,13 +153,13 @@ def analyse(rows, formulas):
         "bottom_hook_score": med(bottom, "hook_score"),
         "top_words": med(top, "words"),
         "bottom_words": med(bottom, "words"),
-        "unclassified": sum(1 for r in ranked if r["formula"] == "unclassified"),
+        "unclassified": sum(1 for r in ranked if r["formula"] == "sin clasificar"),
     }
 
 
 def render(a, out=sys.stdout):
-    head = (f"SWIPE FILE  ·  {a['n']} reels  ·  {a['accounts']} accounts  ·  "
-            f"baseline: {a['baseline']}")
+    head = (f"SWIPE FILE  ·  {a['n']} reels  ·  {a['accounts']} cuentas  ·  "
+            f"referencia: {a['baseline']}")
     print("\n" + head, file=out)
     print("=" * max(len(head), 78), file=out)
     for r in a["reels"]:
@@ -139,57 +167,59 @@ def render(a, out=sys.stdout):
         score = f"{r['hook_score']:.0f}" if r["hook_score"] is not None else " -"
         fid = f"#{r['formula_id']:<2}" if r["formula_id"] else "-  "
         print(f"  {mult:>7}  hook {score:>3}  {fid} {r['formula'][:22]:<22} "
-              f"{r.get('account', '')[:16]:<16} {r['views']:>9,}", file=out)
+              f"{r.get('account', '')[:16]:<16} {miles(r['views']):>9}", file=out)
         print(f"           \"{r['hook'][:96]}\"", file=out)
     print("-" * max(len(head), 78), file=out)
-    print("WHAT IS WORKING IN THIS BATCH", file=out)
+    print("QUÉ ESTÁ FUNCIONANDO EN ESTE LOTE", file=out)
     if a["top_formulas"]:
-        print("  top third by outlier:  "
+        print("  tercio superior por múltiplo:  "
               + ", ".join(f"{n} x{c}" for n, c in a["top_formulas"][:4]), file=out)
     if a["top_hook_score"] is not None:
-        print(f"  median hook score:     top {a['top_hook_score']:.0f}  "
-              f"vs bottom {a['bottom_hook_score']:.0f}", file=out)
-    print(f"  median hook length:    top {a['top_words']} words  "
-          f"vs bottom {a['bottom_words']} words", file=out)
-    print(f"  unclassified:          {a['unclassified']} of {a['n']}. Read those by hand, "
-          "they are where a formula you do not have yet is hiding.", file=out)
-    print("\n  A hand-collected batch is evidence, not proof. Twelve reels shows you "
-          "nothing;\n  forty across six accounts shows you something. Collect more before "
-          "you believe it.\n", file=out)
+        print(f"  nota mediana del hook:         arriba {a['top_hook_score']:.0f}  "
+              f"frente a abajo {a['bottom_hook_score']:.0f}", file=out)
+    print(f"  longitud mediana del hook:     arriba {a['top_words']:g} palabras  "
+          f"frente a abajo {a['bottom_words']:g} palabras", file=out)
+    print(f"  sin clasificar:                {a['unclassified']} de {a['n']}. Léelos a mano: "
+          "ahí se esconde la fórmula que todavía no tienes.", file=out)
+    print("\n  Un lote recogido a mano es un indicio, no una prueba. Doce reels no enseñan "
+          "nada;\n  cuarenta de seis cuentas enseñan algo. Recoge más antes de creértelo.\n",
+          file=out)
 
 
 def to_markdown(a):
     lines = ["# Swipe file", "",
-             f"{a['n']} reels across {a['accounts']} accounts. "
-             f"Ranked by multiple over {a['baseline']}.", ""]
+             f"{a['n']} reels de {a['accounts']} cuentas. "
+             f"Ordenados por múltiplo sobre la {a['baseline']}.", ""]
     for r in a["reels"]:
         mult = f"{r['outlier']:.1f}x" if r["outlier"] else "?"
         lines += [f"## {mult}  {r['formula']}  ({r.get('account', '')})",
-                  f"- views: {r['views']:,}  baseline: {r['baseline']:,}",
-                  f"- hook score: {r['hook_score']}  words: {r['words']}",
+                  f"- vistas: {miles(r['views'])}  referencia: {miles(r['baseline'])}",
+                  f"- nota del hook: {r['hook_score']}  palabras: {r['words']}",
                   f"- hook: \"{r['hook']}\"", ""]
     return "\n".join(lines) + "\n"
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Rank collected reels by outlier multiple.")
-    ap.add_argument("input", nargs="?", default="-", help="TSV file, or - for stdin")
-    ap.add_argument("--hooks", default=HOOKS, help="path to ig-reel/hooks.json")
-    ap.add_argument("--out", help="also write the swipe file as markdown here")
+    ap = argparse.ArgumentParser(description="Ordena reels recopilados por múltiplo sobre su cuenta.")
+    ap.add_argument("input", nargs="?", default="-", help="archivo TSV, o - para stdin")
+    ap.add_argument("--hooks", default=HOOKS, help="ruta a hooks.json")
+    ap.add_argument("--out", help="escribe también el swipe file en markdown aquí")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args()
 
     rows = read_rows(args.input)
     if not rows:
-        print("no usable rows. Need a tab-separated file with at least views and hook.",
-              file=sys.stderr)
+        print("no hay filas válidas. Hace falta un archivo separado por tabuladores con, "
+              "como mínimo, vistas y hook.", file=sys.stderr)
         sys.exit(2)
     formulas = load_formulas(args.hooks)
     a = analyse(rows, formulas)
     if not formulas:
-        print("note: hooks.json not found, formulas not named. Pass --hooks.", file=sys.stderr)
+        print("nota: no se encuentra hooks.json, las fórmulas no se nombran. Pasa --hooks.",
+              file=sys.stderr)
     if score_hook is None:
-        print("note: hookscore.py not importable, hook scores skipped.", file=sys.stderr)
+        print("nota: no se puede importar hookscore.py, se omiten las notas de los hooks.",
+              file=sys.stderr)
 
     if args.json:
         print(json.dumps(a, indent=2, ensure_ascii=False))
@@ -197,9 +227,9 @@ def main():
         render(a)
     if args.out:
         path = os.path.expanduser(args.out)
-        os.makedirs(os.path.dirname(path), exist_ok=True)
+        os.makedirs(os.path.dirname(path) or ".", exist_ok=True)
         open(path, "w", encoding="utf-8").write(to_markdown(a))
-        print(f"wrote {path}", file=sys.stderr)
+        print(f"escrito en {path}", file=sys.stderr)
 
 
 if __name__ == "__main__":
