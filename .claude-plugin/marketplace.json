@@ -1,18 +1,18 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
-  "name": "instagram-agent-skill",
-  "description": "The Instagram agent skill pack for Claude",
+  "name": "instagram-agent-skill-es",
+  "description": "Paquete de skills de Instagram para Claude, en español de España",
   "owner": {
-    "name": "Jake Schincariol",
-    "url": "https://opusjake.ai"
+    "name": "Freddiland",
+    "url": "https://github.com/Freddiland"
   },
   "plugins": [
     {
-      "name": "instagram-agent",
-      "description": "Thirteen Claude skills that run an Instagram account, including a scored hook panel, a viral research skill, a caption linter and a humanizer.",
+      "name": "instagram-agent-es",
+      "description": "Trece skills de Claude para llevar una cuenta de Instagram en español: hooks puntuados, investigación de lo que funciona en tu nicho, revisión del texto del post y un humanizador.",
       "source": "./",
       "category": "productivity",
-      "homepage": "https://github.com/Jakeschincariol/instagram-agent-skill"
+      "homepage": "https://github.com/Freddiland/instagram-agent-skill"
     }
   ]
 }

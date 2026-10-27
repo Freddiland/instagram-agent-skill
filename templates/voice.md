@@ -1,67 +1,81 @@
 # voice.md
 
-Copy this to `~/.claude/instagram/voice.md` and fill it in. Every skill in the
-pack reads it. Ten minutes here is the difference between scripts you shoot and
-scripts you rewrite.
+Copia este archivo en `~/.claude/instagram/voice.md` y rellénalo. Lo leen todas
+las skills del paquete. Diez minutos aquí son la diferencia entre guiones que
+grabas y guiones que reescribes.
 
-If you would rather not fill it in by hand, send Claude three of your own reels
-or captions and say "write my voice.md from these". That works better than
-guessing at the answers.
+Si prefieres no rellenarlo a mano, mándale a Claude tres de tus reels o textos y
+dile «escríbeme el voice.md a partir de estos». Funciona mejor que intentar
+adivinar las respuestas.
 
-This file matters more on Instagram than anywhere else, because you have to say
-the words out loud. A line you would never say is not a draft, it is a retake.
+Este archivo importa más en Instagram que en ningún otro sitio, porque las
+palabras las tienes que decir en voz alta. Una frase que tú no dirías nunca no
+es un borrador, es una toma repetida.
 
 ---
 
-## Who I am
+## Idioma
 
-- **Name:**
-- **Handle:**
-- **What I do, in one sentence:**
-- **Who I am talking to:** (be specific: "photographers charging under $2,000",
-  not "creatives")
-- **What I sell:**
+- **Idioma de todo lo que entregues:** español de España, salvo que pida otro.
+- **Tratamiento:** (tú / vosotros / usted). Por defecto, tú en singular.
+- **Variedad:** (España peninsular / Canarias / neutro para Latinoamérica)
+- **Anglicismos que sí uso:** (reel, hook, CTA, engagement... o ninguno)
+- **Calcos que no quiero:** «al final del día», «mover la aguja», «hacer
+  sentido», «un cambio de juego», mayúsculas en Cada Palabra De Un Título.
 
-## What I sound like
+## Quién soy
 
-- **Three of my own reels or captions that sound most like me:** (paste them)
-- **On camera I am:** (fast and loud / dry / calm / funny / deadpan)
-- **Words I actually use:**
-- **Words I would never say out loud:**
-- **Do I swear:** (yes / mild / no)
-- **Emoji in captions:** (never / one, rarely / freely)
-- **Face on camera:** (always / sometimes / faceless)
-- **Voiceover or to-camera:**
-- **Pace:** (words per minute, if you have timed yourself reading a script.
-  `beats.py --wpm` uses this. Most people are between 150 and 200.)
+- **Nombre:**
+- **@:**
+- **A qué me dedico, en una frase:**
+- **A quién le hablo:** (concreto: «fotógrafos que cobran menos de 2.000 € por
+  boda», no «creativos»)
+- **Qué vendo:**
 
-## My positions
+## Cómo sueno
 
-Three to five things I believe that some of my audience does not. These are
-where the good reels come from.
+- **Tres de mis reels o textos que más suenan a mí:** (pégalos)
+- **Delante de la cámara soy:** (rápido y con energía / seco / tranquilo /
+  gracioso / serio con retranca)
+- **Palabras que uso de verdad:**
+- **Palabras que no diría nunca en voz alta:**
+- **¿Digo tacos?:** (sí / suaves / no)
+- **Emojis en los textos:** (nunca / uno, de vez en cuando / sin problema)
+- **Cara en cámara:** (siempre / a veces / sin cara)
+- **Voz en off o a cámara:**
+- **Ritmo:** (palabras por minuto, si te has cronometrado leyendo un guion en
+  voz alta. `beats.py --wpm` lo usa. En español la mayoría de la gente cae
+  entre 150 y 210; si no lo sabes, se usa 170.)
+
+## Mis posturas
+
+Entre tres y cinco cosas que creo y que parte de mi público no cree. De aquí
+salen los buenos reels.
 
 1.
 2.
 3.
 
-## Off limits
+## Lo que no se toca
 
-- **Topics I do not post about:**
-- **Clients, numbers or names I cannot say publicly:**
-- **Claims I am not allowed to make:** (regulated industry, employer policy, NDA)
+- **Temas de los que no publico:**
+- **Clientes, cifras o nombres que no puedo decir en público:**
+- **Afirmaciones que no puedo hacer:** (sector regulado, política de la empresa,
+  acuerdo de confidencialidad)
 
-## Proof I can use
+## Pruebas que puedo usar
 
-Real numbers, outcomes and stories I am happy to put my name on. The skills will
-never invent one, so if this section is empty, every draft comes back with
-`{{your number}}` in it.
+Cifras, resultados e historias reales que estoy dispuesto a firmar. Las skills
+no se van a inventar ninguna, así que si esta sección está vacía, todos los
+borradores vendrán con `{{tu cifra}}` dentro.
 
 -
 -
 -
 
-## The ask
+## La petición
 
-- **My keyword CTA, if I use one:** (one word, sayable, no spaces)
-- **What the keyword sends them:**
-- **Where my link goes:**
+- **Mi palabra clave, si uso una:** (una palabra, fácil de decir, sin espacios
+  y mejor sin tilde)
+- **Qué les mando con esa palabra:**
+- **A dónde lleva mi enlace:**
