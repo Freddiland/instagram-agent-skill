@@ -79,9 +79,12 @@ imprime cada diapositiva:
 
 Escribe el HTML con `width:1080px; height:1350px`, un solo color de acento y
 letra de 32px como mínimo, porque se lee en un móvil a un tercio de su tamaño
-real. Comprueba que las tildes y la ñ se ven bien con la fuente elegida. Si el
-proyecto tiene una skill de marca o un sistema de diseño, úsalo y no te
-inventes una paleta.
+real. Comprueba que las tildes y la ñ se ven bien con la fuente elegida.
+
+**Marca:** lee `~/.claude/instagram/marca.md` si existe y aplícalo siempre:
+colores, tipografía, logo y @. No te inventes una paleta. Si no existe y el
+proyecto tiene una skill de marca o un sistema de diseño, úsalo; si no hay
+nada, pregunta por los colores antes de generar los archivos.
 
 ## Salida
 

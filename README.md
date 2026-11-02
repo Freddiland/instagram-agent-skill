@@ -33,6 +33,8 @@ git clone https://github.com/Freddiland/instagram-agent-skill.git
 mkdir -p ~/.claude/skills ~/.claude/instagram
 cp -r instagram-agent-skill/skills/ig-* ~/.claude/skills/
 cp instagram-agent-skill/templates/voice.md ~/.claude/instagram/voice.md
+cp instagram-agent-skill/templates/marca-todovending.md ~/.claude/instagram/marca.md
+cp instagram-agent-skill/templates/assets/todovending-logo.png ~/.claude/instagram/
 ```
 
 Para usarlas solo en un proyecto, copia las mismas carpetas en `.claude/skills/`
@@ -53,7 +55,8 @@ carpeta dentro) y se guarda con el botón «Guardar habilidad». Guarda también
 `ig-repurpose` e `ig-viral` usan sus fórmulas de hook.
 
 En claude.ai la carpeta `~/.claude/instagram/` no se conserva entre
-conversaciones, así que adjunta tu `voice.md` cuando lo necesites.
+conversaciones, así que adjunta tu `voice.md` y tu `marca.md` cuando los
+necesites.
 
 ### Tu voz
 
@@ -249,6 +252,8 @@ skills/ig-human/detect.py          el panel de cinco comprobaciones
 skills/ig-viral/swipe.py           orden por múltiplo y clasificación de fórmulas
 skills/ig-profile/rubric.json      la nota del perfil sobre 100
 templates/voice.md                 tu perfil de voz. Rellénalo primero.
+templates/marca-todovending.md     colores, tipografía, logo y @ de TodoVending
+templates/assets/                  logo de TodoVending
 ```
 
 ## Créditos

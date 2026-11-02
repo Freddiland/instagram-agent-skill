@@ -61,6 +61,8 @@ palabras del propio público. Pásaselas a `/ig-reel` como fórmula #16.
 - **Una idea por pantalla.** Nadie lee un párrafo en una historia.
 - **El texto, en el centro.** En 1080x1920, nada por encima de y=250 ni por
   debajo de y=1600. Arriba va la fila del perfil y abajo la barra de respuesta.
+- **Colores de marca.** Si existe `~/.claude/instagram/marca.md`, cualquier
+  pantalla que generes usa sus colores, tipografía, logo y @. Sin inventar.
 - **Háblale a una persona.** «Tú», en singular. Las historias son lo más
   parecido a un mensaje privado sin serlo.
 - **No compartas tu propio post en historias sin decir nada.** Es la pantalla

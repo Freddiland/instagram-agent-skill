@@ -33,9 +33,11 @@ público lo pida. Nada de calcos del inglés.
    habla. Si no existe, pide **tres de sus propios reels**, transcríbelos o
    léelos, deduce la voz y escribe el archivo. Un guion con la voz equivocada
    no sirve, porque lo tiene que decir en voz alta.
-2. Lee `hooks.json` en esta carpeta. 26 fórmulas, cada una con plantilla,
+2. Lee `~/.claude/instagram/marca.md` si existe. Si generas tarjetas o
+   texto en pantalla, usa siempre sus colores, tipografía, logo y @.
+3. Lee `hooks.json` en esta carpeta. 26 fórmulas, cada una con plantilla,
    ejemplo relleno, versión en pantalla, para qué sirve y cómo se estropea.
-3. Si la idea es floja, no la rellenes. Haz una sola pregunta agrupada: qué
+4. Si la idea es floja, no la rellenes. Haz una sola pregunta agrupada: qué
    pasó, a quién, y qué costó o qué aportó. Un Reel necesita una cosa concreta
    y verdadera. Consíguela antes de escribir.
 4. Si existe `~/.claude/instagram/swipe.md`, léelo. Lo escribe `/ig-viral` y es
